@@ -1,0 +1,40 @@
+﻿
+<br />
+<br />
+<br />
+
+<input id="btn-create-roles" type="submit" value="Create roles" class="btn btn-primary" style="text-align:center"/>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#btn-create-roles").click(function () {
+
+                $.ajax({
+                url: '/Home/Create3Roles',
+                success: function (data) {
+
+                    if (data == true) {
+                        alert("Roles 'Admin', 'Manager' and 'User' successfully created.\nYou can now register a new user.");
+                    }
+
+                    if (data == false) {
+                        alert("Roles 'Admin', 'Manager' and 'User' already created.\n");
+                    }
+                }
+
+                });
+
+            });
+
+        })
+
+    </script>
+
+}

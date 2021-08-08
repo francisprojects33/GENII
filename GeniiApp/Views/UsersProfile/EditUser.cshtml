@@ -1,0 +1,84 @@
+﻿@model GeniiApp.Areas.Identity.Data.UserViewModel
+
+
+<h2>Edit user</h2>
+
+<form asp-controller="UsersProfile" asp-action="EditUser" method="post" class="form-horizontal" role="form">
+    <h4>You can change the user details below</h4>
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Id" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Id" class="form-control" readonly="readonly" />
+            <span asp-validation-for="Id" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FirstName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SurName" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="SurName" class="form-control" />
+            <span asp-validation-for="SurName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Role" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            @*<input asp-for="Role" class="form-control" />*@
+            <select id="SelectedRoles" asp-for="Role" class="form-control" asp-items='Html.GetEnumSelectList<UserRole>()'></select>
+            <span asp-validation-for="Role" class="text-danger"></span>
+        </div>
+    </div>
+
+    <span class="item-dropdown-list" style="display:none">
+        <span id="stored-user-role">@ViewData["UserRoles"]</span>
+    </span>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-primary" value="Save user" />
+            <a asp-action="UserManagement" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+
+            var data = $("#stored-user-role").text();
+            var getIndex = data.split(",")[0];
+
+            getIndex = getIndex.split("=")[1];
+
+            var getIndexCleaned = getIndex.trim();
+
+            $('#SelectedRoles option[value=' + getIndexCleaned + ']').prop('selected', true);
+
+        });
+
+    </script>
+
+}

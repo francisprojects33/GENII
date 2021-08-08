@@ -1,0 +1,139 @@
+﻿@*@model IEnumerable<GeniiApp.Models.Invoice>*@
+@model IEnumerable<GeniiApp.Models.InvoiceViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.CreateByUser)
+            </th>*@
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SurName)
+            </th>
+
+            <th>
+                <b>Invoice items</b>
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.TotalInvoice)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.CreateByUser)
+                </td>*@
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SurName)
+                </td>
+
+                <td>
+                    <img src="~/image/icons8-menu-no-move.png" id="@item.InvoiceId" class="image-view-item" data-toggle="tooltip" data-placement="top" title="View items" width="15" height="15" alt="png image" /><br />
+
+                    <div id="@item.InvoiceId" class="items-list" style="display:none;">
+                    </div>
+
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalInvoice)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.InvoiceId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.InvoiceId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/popper.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+
+            $(".image-view-item").click(function (event) {
+
+                var elementId = event.target.id;
+
+                if ($('div[id=' + elementId + ']').css('display') == 'none') {
+                    $('div[id=' + elementId + ']').css("display", "block");
+                }
+                else if ($('div[id=' + elementId + ']').css('display') == 'block') {
+                    $('div[id=' + elementId + ']').css("display", "none");
+                }
+
+                // Fetch Items from Controller if DIV is empty
+                if ($.trim($('div[id=' + elementId + ']').html())) {
+                }
+                else {
+                    getItems(elementId);
+                }
+
+            });
+
+            function getItems(d) {
+
+                $.ajax({
+                    url: '/Invoices/PopulateProductInvoiceItemName',
+                    data: {id:d},
+                    success: function (data) {
+
+                        var listofdata = "";
+
+                        $.each(data.reverse(), function (key, value) {
+
+                            listofdata = listofdata + "<br>" + value;
+
+                            $('div[id=' + d + ']').append(value + "<br><br>");
+
+                        });
+
+                    }
+                });
+
+            }
+
+        });
+
+    </script>
+
+}

@@ -1,0 +1,176 @@
+﻿@model IEnumerable<GeniiApp.Models.ProductInvoice>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Invoice)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.ItemName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Invoice.InvoiceId)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+
+        const getInstances = ({ key }, data) => data.filter(d => d.key === key).length;
+
+        var dict = [];
+
+        dict.push({
+            key: "001",
+            value: "value1"
+        });
+
+        dict.push({
+            key: "002",
+            value: "value2"
+        });
+
+        dict.push({
+            key: "003",
+            value: "value3"
+        });
+
+        dict.push({
+            key: "002",
+            value: "value2+1"
+        });
+
+        dict.push({
+            key: "001",
+            value: "value1"
+        });
+
+        dict.push({
+            key: "002",
+            value: "value2"
+        });
+
+
+        //containsObject(dict);
+
+        //function containsObject(dict) {
+
+        //    var dicLength = dict.length;
+
+        //    for (var i = 0; i < dicLength; i++) {
+
+        //        console.log(dict[i]);
+
+        //        alert(dict[i].key + " - " + dict[i].value);
+
+        //        if (dict[i].key.hasOwnPropery()
+        //            === dict[i].key) {
+        //            alert("Already exist");
+        //        }
+
+        //        //Do something
+        //    }
+        //}
+
+        //const getInstances = ({ key }, data) => data.filter(d => d.key === key).length
+
+        const groupedPeople = dict.reduce((group, person, i, dict) => {
+            const alreadyBeenGrouped = group.some(({ key }) => key === person.key)
+
+            if (!alreadyBeenGrouped) {
+                group.push({
+                    key: person.key,
+                    value: person.value,
+                    count: getInstances(person, dict)
+                })
+            }
+
+            return group
+        }, [])
+
+        console.log(groupedPeople);
+
+        //$.each(groupedPeople, function (value.) {
+        //    alert(value );
+        //})
+
+        var dicLength = groupedPeople.length;
+
+        for (var i = 0; i < dicLength; i++) {
+
+        //        console.log(dict[i]);
+
+            alert(groupedPeople[i].key + " - " + groupedPeople[i].value + " - " + groupedPeople[i].count);
+
+            // Do something
+
+        }
+
+
+
+        // ********************************************************
+
+        //const getInstances = ({ name}, data) => data.filter(d => d.name === name).length
+
+        //const people = [
+        //    { name: 'Jacob', lastName: 'Smith', dob: '1995-11-29' },
+        //    { name: 'Jacob', lastName: 'Smith', dob: '1991-08-21' },
+        //    { name: 'Ann', lastName: 'Smith', dob: '1995-11-29' },
+        //    { name: 'Ann', lastName: 'Nansen', dob: '1983-01-01' },
+        //    { name: 'Jacob', lastName: 'Smith', dob: '1985-06-15' },
+        //    { name: 'Jacob', lastName: 'Smith', dob: '1995-11-29' },
+        //    { name: 'Ann', lastName: 'Smith', dob: '2010-11-29' },
+        //]
+
+        //const groupedPeople = people.reduce((group, person, i, people) => {
+        //    //const alreadyBeenGrouped = group.some(({ name, lastName }) => name === person.name && lastName === person.lastName)
+        //    const alreadyBeenGrouped = group.some(({ name}) => name === person.name)
+
+        //    if (!alreadyBeenGrouped) {
+        //        group.push({
+        //            name: person.name,
+        //            lastName: person.lastName,
+        //            count: getInstances(person, people)
+        //        })
+        //    }
+
+        //    return group
+        //}, [])
+
+        //console.log(groupedPeople);
+
+    </script>
+
+}

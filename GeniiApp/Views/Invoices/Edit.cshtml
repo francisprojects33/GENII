@@ -1,0 +1,277 @@
+﻿@model GeniiApp.Models.Invoice
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Invoice</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="InvoiceId" />
+            <div class="form-group" style="display:none;">
+                <label asp-for="CreatedDate" class="control-label"></label>
+                <input asp-for="CreatedDate" class="form-control" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display:none;">
+                <label asp-for="CreateByUser" class="control-label"></label>
+                <input asp-for="CreateByUser" class="form-control" />
+                <span asp-validation-for="CreateByUser" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label">Add items to invoice</label>
+
+                <div class="form-select form-select-lg mb-3">
+
+                    @Html.DropDownList("SelectedProducts",
+                        new SelectList((System.Collections.IEnumerable)ViewData["Products"], "Value", "Text", new { @class = "form-control dropdown-list" }))
+
+                    <span class="span-add-item">
+                        <button type="button" class="btn btn-info float-right" id="btn-add-item">Add</button>
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="form-group card-frame">
+
+                <div class="card" style="">
+                    <div class="card-body">
+                        <h5 class="card-title">Items added to invoice</h5>
+                        <hr />
+                        <span id="main-body-card"></span>
+                        
+                        <span class="item-dropdown-list" style="display:none">
+                            @Html.DropDownList("SelectedProductsItemName",
+                                new SelectList((System.Collections.IEnumerable)ViewData["ProductsPerInvoice"], "Value", "Text", new { @class = "form-control", @style = "display:none" }))
+                        </span>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="TotalInvoice" class="control-label"></label>
+                <input id="total-invoice-input" asp-for="TotalInvoice" class="form-control" readonly />
+                <span asp-validation-for="TotalInvoice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input id="btn-submit" type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+
+            var p1 = 0;
+            var totalInvoice = 0;
+            var mylist = [];
+
+            loadSavedItems();
+
+            // Load Items
+            function loadSavedItems() {
+                
+                var p = 0;
+
+                $("#SelectedProductsItemName option").each(function () {
+
+                    var getCostPerItem123 = $('#SelectedProductsItemName :selected').val();
+                    var selectedItem = $(this).text();
+                    var getCostPerItem = $(this).val();
+                    var productId;
+
+                    productId = getCostPerItem.split("-")[0];
+                    getCostPerItem = getCostPerItem.split("-")[1];
+
+                    getCostPerItem = getCostPerItem.split(",")[0];
+
+                    totalInvoice = parseInt(totalInvoice) + parseInt(getCostPerItem);
+                    itemToRemoveClass = "ProductId_" + productId + "_" + p + "_Class";
+
+                    $('<div id="created_div" class="' + itemToRemoveClass + '">' + '<div>' + '<b>+</b> ' + selectedItem + ' :  R ' + ' ' + '<span>' + getCostPerItem + '<button type="button"  id="' + productId + '_' + p + '" class="btn btn-danger btn-sm btn-remove-item float-right">Remove</button></span></div><br></div>').insertAfter('#main-body-card');
+
+                    p++;
+
+
+                    $("#SelectedProducts option").each(function () {
+
+                        var allValue = $(this).val();
+                        var getId = allValue.split("-")[0];
+
+                    });
+
+                    $("#total-invoice-input").val(totalInvoice);
+
+                });
+            }
+
+
+            $("#btn-add-item").click(function () {
+
+                var selectedItem = $('#SelectedProducts :selected').text();
+                var getCostPerItem = $('#SelectedProducts :selected').val();
+                var productId;
+                var itemToRemove;
+
+                productId = getCostPerItem.split("-")[0];
+                getCostPerItem = getCostPerItem.split("-")[1];
+
+                getCostPerItem = getCostPerItem.split(".")[0];
+                totalInvoice = parseInt(totalInvoice) + parseInt(getCostPerItem);
+                itemToRemove = "ProductId_" + productId;
+                itemToRemoveClass = "ProductId_" + productId + "_" + p1 + "_Class";
+
+                $('<div id="created_div" class="' + itemToRemoveClass + '">' + '<div>' + '<b>+</b> ' + selectedItem + ' :  R ' + ' ' + '<span>' + getCostPerItem + '<button type="button"  id="' + productId + '_' + p1 + '" class="btn btn-danger btn-sm btn-remove-item float-right">Remove</button></span></div><br></div>').insertAfter('#main-body-card');
+
+                p1++;
+
+
+                $("#SelectedProducts option").each(function () {
+
+                    var allValue = $(this).val();
+                    var getId = allValue.split("-")[0];
+
+                });
+
+                $("#total-invoice-input").val(totalInvoice);
+
+                enablesubmitbutton();
+
+                function enablesubmitbutton() {
+
+                    var target = $("#btn-submit");
+
+                    if (target.is(":disabled")) {
+                        target.removeAttr('disabled');
+                    }
+                }
+            });
+
+
+
+            // Substract Item Price from Total
+            $(document).on("click", ".btn-remove-item", function (event) {
+
+                var btnId = event.target.id
+                var itemPrice = $("#" + event.target.id).parent().html();
+                var itemPrice = itemPrice.split("<")[0];
+
+                // Substract from Total Value
+                var total = $("#total-invoice-input").val();
+                var totalSubstracted = parseInt(total) - parseInt(itemPrice);
+
+                $("#total-invoice-input").val(totalSubstracted);
+            });
+
+
+            $(document).on("click", "button", function (event) {
+
+                var el = event.target.id;
+                var start = "ProductId_";
+                var end = "_Class";
+                var entire = start + el + end;
+                var id = el.split("_")[0];
+
+                $("div." + entire).remove();
+                //$("input[type='hidden']").remove("." + id);
+
+            });
+
+
+            $("#btn-submit").click(function () {
+
+                $(".btn-remove-item").each(function () {
+
+                    var itemId = this.id;
+                    var getProductId = itemId.split("_")[0];
+
+                    mylist.push(getProductId);
+
+                });
+
+                getoccurrences();
+
+                function getoccurrences() {
+
+                    var arr = mylist;
+
+                    var occurrences = {};
+
+                    for (var i = 0, j = arr.length; i < j; i++) {
+
+                        occurrences[arr[i]] = (occurrences[arr[i]] || 0) + 1;
+
+                    }
+
+                    //console.log(occurrences);
+
+                    createhiddenfields();
+
+                    function createhiddenfields() {
+
+                        var x;
+                        var ina = 0;
+                        var inaq = 0;
+
+                        for (x in occurrences) {
+
+                            $("<input class='" + x + "' value='" + x + "' name='ProductInvoices[" + ina + "].ProductId' type='hidden' />").insertAfter('#created_div');
+
+                            $("<input class='" + x + "' value='" + occurrences[x] + "' name='ProductInvoices[" + inaq + "].QuantitySold' type='hidden' />").insertAfter('#created_div');
+
+                            ina++;
+                            inaq++;
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+
+            disablesubmitbutton();
+
+            function disablesubmitbutton() {
+
+                $(document).on("click", ".btn-remove-item", function (event) {
+
+                    var btnremove = $(".btn-remove-item").length;
+
+                    if (btnremove == 0) {
+
+                        totalInvoice = 0;
+                        var target = $("#btn-submit");
+                        target.attr('disabled', true);
+
+                    }
+
+                });
+
+            }
+
+        });
+
+    </script>
+
+}

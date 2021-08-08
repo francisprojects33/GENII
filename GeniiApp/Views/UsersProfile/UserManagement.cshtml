@@ -1,0 +1,70 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+@model IEnumerable<GeniiApp.Areas.Identity.Data.ApplicationUser>
+
+<h2>User management</h2>
+
+@if (!Model.Any())
+{
+<tr><td colspan="3" class="text-center">No User Accounts</td></tr> }
+else
+{
+<table class="table table-condensed table-bordered" header header-content="User Management">
+    <tr>
+        <th>User ID</th>
+        <th>First name</th>
+        <th>Surname</th>
+        <th>User name</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+
+
+    @foreach (var item in Model)
+    {
+<tr>
+
+    <td>@Html.DisplayFor(modelItem => item.Id)</td>
+    <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+    <td>@Html.DisplayFor(modelItem => item.SurName)</td>
+    <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+
+    <td>
+        <form asp-action="DeleteUser" asp-route-id="@item.Id" method="post">
+            <a class="btn btn-sm btn-primary" asp-action="EditUser" asp-route-id="@item.Id">Edit</a>
+            <button type="submit" onclick="return confirm('Do you really want to delete this user?');" class="btn btn-sm btn-danger">
+                Delete
+            </button>
+        </form>
+    </td>
+</tr>
+}
+</table>}
+
+<p>
+    <input id="btn-add-new-user" type="submit" value="Add new user" class="btn btn-primary" />
+</p>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#btn-add-new-user").click(function () {
+                
+                var url = "/Identity/Account/Register";
+                window.location.href = url;
+
+            });
+
+        })
+
+    </script>
+
+}
