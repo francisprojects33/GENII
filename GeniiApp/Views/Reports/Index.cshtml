@@ -3,7 +3,7 @@
     ViewData["Title"] = "Reports";
 }
 
-<h1>Inside Reports Page</h1>
+<h1>Reports Page</h1>
 <br />
 <br />
 
@@ -17,67 +17,84 @@
                 </div>
                 <div class="card-body">
                     <span id="main-body-card"></span>
-                    <span id="GetNumberOfItemsSoldPerProduct-body">Papa</span>
+                    <span id="GetNumberOfItemsSoldPerProduct-body"></span>
                 </div>
             </div>
         </div>
 
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-header">
-                    <span id="GetNumberOfProductsSold">Number of products sold</span>
+        <div class="col-sm-8">
+
+            <div class="row top-row-right">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <span id="GetNumberOfProducts">Number of products</span>
+                        </div>
+                        <div class="card-body">
+                            <span id="GetNumberOfProducts-body"></span>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <span id="GetNumberOfProductsSold-body"></span>
+
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <span id="GetNumberOfProductsSold">Number of products sold</span>
+                        </div>
+                        <div class="card-body">
+                            <span id="GetNumberOfProductsSold-body"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-header">
-                    <span id="GetnumberOfProductsInStock">Number of products in stock</span>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <span id="GetnumberOfProductsInStock">Number of products in stock</span>
+                        </div>
+                        <div class="card-body">
+                            <span id="GetnumberOfProductsInStock-body"></span>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <span id="GetnumberOfProductsInStock-body"></span>
+
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <span id="GetnumberOfProductsInStockVsSold">Number of products in stock vs sold</span>
+                        </div>
+                        <div class="card-body">
+                            <span id="GetnumberOfProductsInStockVsSold-body"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-header">
-                    <span id="GetnumberOfProductsInStockVsSold">Number of products in stock vs sold</span>
-                </div>
-                <div class="card-body">
-                    <span id="GetnumberOfProductsInStockVsSold-body"></span>
-                </div>
-            </div>
-        </div>
 
 
-        @*<div class="col-sm-6">
-            <div class="card">
-                <div class="card-header">
-                    Bar Chart
-                </div>
-                <div class="card-body">
-                    <canvas class="my-4 h-25" id="bar">
-                    </canvas>
-                </div>
-            </div>
-        </div>*@
+            @*<div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-header">
+                            Bar Chart
+                        </div>
+                        <div class="card-body">
+                            <canvas class="my-4 h-25" id="bar">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>*@
 
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-header">
-                    Pie Chart
-                </div>
-                <div class="card-body">
-                    <canvas class="my-4 h-25" id="pie">
-                    </canvas>
-                </div>
-            </div>
+            @*<div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        Pie Chart
+                    </div>
+                    <div class="card-body">
+                        <canvas class="my-4 h-25" id="pie">
+                        </canvas>
+                    </div>
+                </div>*@
         </div>
     </div>
 </div>
@@ -87,8 +104,8 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>*@
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>*@
     <script src="~/lib/chartjs/chart.min.js"></script>
 
     <script>
@@ -99,23 +116,23 @@
                 success: function (data) {
                     var listofdata = "";
 
-                    console.log(data);
-                    alert(data);
-
                     $.each(data.reverse(), function (key, value) {
                         listofdata = listofdata + "<br>" + value;
-
-                        //alert(value);
 
                         $('<div id="created_div" class="' + value + '">' + '<div>' + '<b>' + value + '</b>' + '</div><br></div>').insertAfter('#main-body-card');
 
                     });
 
-                    // -------------------------------------
-
-
-
                     $("#GetNumberOfItemsSoldPerProduct-body3").text(listofdata);
+                }
+            });
+
+            $.ajax({
+                url: '/Reports/GetNumberOfProducts',
+                success: function (data) {
+
+                    $("#GetNumberOfProducts-body").text(data);
+
                 }
             });
 
@@ -149,51 +166,51 @@
 
         });
 
-        //var barchart = document.getElementById('bar').getContext('2d');
-        //var mybarchart = new Chart(barchart, {
-        //    type: 'bar',
-        //    data: {
-        //        labels: ['001', '002', '003', '004', '005'],
-        //        datasets: [{
-        //            label: 'Bar Chart',
-        //            data: [100, 200, 300, 400, 600],
-        //            backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-        //            hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
-        //        }]
-        //    },
-        //    options: {
-        //        scales: {
-        //            yAxes: [{
-        //                ticks: {
-        //                    beginAtZero: true
-        //                }
-        //            }]
-        //        }
-        //    }
-        //})
+            //var barchart = document.getElementById('bar').getContext('2d');
+            //var mybarchart = new Chart(barchart, {
+            //    type: 'bar',
+            //    data: {
+            //        labels: ['001', '002', '003', '004', '005'],
+            //        datasets: [{
+            //            label: 'Bar Chart',
+            //            data: [100, 200, 300, 400, 600],
+            //            backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
+            //            hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+            //        }]
+            //    },
+            //    options: {
+            //        scales: {
+            //            yAxes: [{
+            //                ticks: {
+            //                    beginAtZero: true
+            //                }
+            //            }]
+            //        }
+            //    }
+            //})
 
-        var piechart = document.getElementById('pie').getContext('2d');
-        var mypiechart = new Chart(piechart, {
-            type: 'pie',
-            data: {
-                labels: ['001', '002', '003', '004', '005'],
-                datasets: [{
-                    label: 'Pie Chart',
-                    data: [100, 200, 300, 400, 600],
-                    backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-                    hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        })
+            //var piechart = document.getElementById('pie').getContext('2d');
+            //var mypiechart = new Chart(piechart, {
+            //    type: 'pie',
+            //    data: {
+            //        labels: ['001', '002', '003', '004', '005'],
+            //        datasets: [{
+            //            label: 'Pie Chart',
+            //            data: [100, 200, 300, 400, 600],
+            //            backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
+            //            hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+            //        }]
+            //    },
+            //    options: {
+            //        scales: {
+            //            yAxes: [{
+            //                ticks: {
+            //                    beginAtZero: true
+            //                }
+            //            }]
+            //        }
+            //    }
+            //})
 
     </script>
 

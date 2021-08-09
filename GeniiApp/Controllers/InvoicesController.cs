@@ -257,32 +257,6 @@ namespace GeniiApp.Controllers
             return stockLevelForEachItem;
         }
 
-        //public List<string> PopulateProductInvoiceItemName2()
-        //{
-        //    int? id = 0;
-
-        //    var invoice = _context.Invoices.Include("ProductInvoices").Where(i => i.InvoiceId == id).FirstOrDefault();
-        //    var ProductInvoiceItemName = invoice.ProductInvoices.Select(p => new { p.ProductId, p.QuantitySold }).ToList();
-        //    var productIds = ProductInvoiceItemName.SelectMany(i => Enumerable.Repeat(i.ProductId, i.QuantitySold)).ToList();
-        //    var ItemFullDetail = productIds
-        //                    .Join(_context.Products,
-        //                    left => left,
-        //                    right => right.ProductId,
-        //                    (left, right) => new { items = right });
-
-        //    IEnumerable<SelectListItem> items = ItemFullDetail.Select(c => new SelectListItem
-        //    {
-        //        Value = c.items.ProductId.ToString() + "-" + c.items.CostPerItem,
-        //        Text = c.items.ItemName
-        //    });
-
-        //    ViewData["ProductsPerInvoice"] = items;
-
-        //    return null;
-        //}
-
-
-
     }
 
 }

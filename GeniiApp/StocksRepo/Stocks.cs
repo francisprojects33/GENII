@@ -68,6 +68,7 @@ namespace GeniiApp.StocksRepo
             return await Task.FromResult(isStocksLows);
         }
 
+        //Send notifications to managers only if item stocks are running low(30 % or less)
         public async Task<string> SendNotificationsAsync()
         {
             MimeMessage message = new MimeMessage();
