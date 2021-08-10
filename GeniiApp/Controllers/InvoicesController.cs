@@ -2,6 +2,7 @@
 using GeniiApp.Data;
 using GeniiApp.Models;
 using GeniiApp.StocksRepo;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace GeniiApp.Controllers
 {
+    [Authorize(Roles = "Manager,User")]
     public class InvoicesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -31,28 +33,28 @@ namespace GeniiApp.Controllers
             _authDbContext = authDbContext;
         }
 
-        //[Authorize(Roles = "Manager")]
         public async Task<IActionResult> Index()
         {
-            var invoiceCont = await  _context.Invoices.ToListAsync();
+            var user = await GetCurrentUserAsync();
+            var userId = user?.Id;
+            Guid userIdGuid = Guid.Parse(userId);
+
+            var isCurrentUserInRoleUser = await _userManager.IsInRoleAsync(user, "User");
+
+            if(isCurrentUserInRoleUser)
+            {
+                var invoiceConts = await _context.Invoices.Where(i => i.CreateByUser == userIdGuid).ToListAsync();
+                var usersDetails = await _userManager.Users.Select(x => new ApplicationUser { Id = x.Id, FirstName = x.FirstName, SurName = x.SurName }).ToListAsync();
+                var result = await DisplayInvoiceDataPerUser(userIdGuid, invoiceConts, usersDetails);
+
+                return View(result);
+            }
+
+            var invoiceCont = await _context.Invoices.ToListAsync();
             var usersDetail = await _userManager.Users.Select(x => new ApplicationUser { Id = x.Id, FirstName = x.FirstName, SurName = x.SurName }).ToListAsync();
+            var res = await DisplayInvoiceDataPerUser(userIdGuid, invoiceCont, usersDetail);
 
-            var invoiceData = from invoice in invoiceCont
-                               join
-                               usrDtl in usersDetail
-                               on invoice.CreateByUser.ToString() equals usrDtl.Id into tempstorage
-                               from dx in tempstorage.DefaultIfEmpty()
-                               select new InvoiceViewModel
-                               {
-                                   InvoiceId = invoice.InvoiceId,
-                                   CreateByUser = invoice.CreateByUser.ToString(),
-                                   CreatedDate = invoice.CreatedDate,
-                                   TotalInvoice = invoice.TotalInvoice,
-                                   FirstName = (dx != null) ? dx.FirstName : "NULL",
-                                   SurName = (dx != null) ? dx.SurName : "NULL"
-                               };
-
-            return View(invoiceData);
+            return View(res);
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -255,6 +257,26 @@ namespace GeniiApp.Controllers
                             .ToListAsync();
 
             return stockLevelForEachItem;
+        }
+
+        private Task<IEnumerable<InvoiceViewModel>> DisplayInvoiceDataPerUser(Guid userId, List<Invoice> invoices, List<ApplicationUser> appUsers)
+        {
+            var invoiceData = from invoice in invoices
+                              join
+                              usrDtl in appUsers
+                              on invoice.CreateByUser.ToString() equals usrDtl.Id into tempstorage
+                              from dx in tempstorage.DefaultIfEmpty()
+                              select new InvoiceViewModel
+                              {
+                                  InvoiceId = invoice.InvoiceId,
+                                  CreateByUser = invoice.CreateByUser.ToString(),
+                                  CreatedDate = invoice.CreatedDate,
+                                  TotalInvoice = invoice.TotalInvoice,
+                                  FirstName = (dx != null) ? dx.FirstName : "NULL",
+                                  SurName = (dx != null) ? dx.SurName : "NULL"
+                              };
+
+            return Task.FromResult(invoiceData);
         }
 
     }

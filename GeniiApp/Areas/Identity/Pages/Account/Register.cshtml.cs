@@ -18,7 +18,7 @@ using GeniiApp.Models;
 
 namespace GeniiApp.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;

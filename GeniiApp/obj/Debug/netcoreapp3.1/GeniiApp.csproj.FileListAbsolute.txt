@@ -591,4 +591,3 @@ C:\Users\ADMIN\Documents\Francis\Job\41\Assessment\GeniiApp\GeniiApp\obj\Debug\n
 C:\Users\ADMIN\Documents\Francis\Job\41\Assessment\GeniiApp\GeniiApp\obj\Debug\netcoreapp3.1\GeniiApp.dll
 C:\Users\ADMIN\Documents\Francis\Job\41\Assessment\GeniiApp\GeniiApp\obj\Debug\netcoreapp3.1\GeniiApp.pdb
 C:\Users\ADMIN\Documents\Francis\Job\41\Assessment\GeniiApp\GeniiApp\obj\Debug\netcoreapp3.1\GeniiApp.genruntimeconfig.cache
-C:\Users\ADMIN\Documents\Francis\Job\41\Assessment\GeniiApp\GeniiApp\obj\Debug\netcoreapp3.1\GeniiApp.csprojAssemblyReference.cache
