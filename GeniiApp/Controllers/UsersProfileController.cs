@@ -10,6 +10,7 @@ using GeniiApp.Models;
 
 namespace GeniiApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Authorize]
     public class UsersProfileController : Controller
     {

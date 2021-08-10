@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 using GeniiApp.Models;
 using GeniiApp.StocksRepo;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GeniiApp.Controllers
 {
+    [Authorize(Roles = "Manager")]
     public class ReportsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,7 +26,6 @@ namespace GeniiApp.Controllers
         {
             return View();
         }
-
 
         // 1. The number of Items sold per product
         public async Task<List<string>> GetNumberOfItemsSoldPerProduct()
@@ -80,7 +81,6 @@ namespace GeniiApp.Controllers
         {
             var numberOfProductsInStock = _context.Products.Select(p => p.ProductId).Count();
             var numberOfProductsSold = _context.ProductInvoices.Select(x => x.ProductId).Distinct().Count();
-            //var numberOfProductsInStockVsSold = numberOfProductsInStock - numberOfProductsSold;
 
             string numberOfProductsInStockVsSold = numberOfProductsInStock + " / " + numberOfProductsSold;
 

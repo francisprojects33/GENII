@@ -1,0 +1,24 @@
+﻿<div>
+
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            var url = "/Identity/Account/Register";
+            window.location.href = url;
+
+        });   
+
+    </script>
+
+}

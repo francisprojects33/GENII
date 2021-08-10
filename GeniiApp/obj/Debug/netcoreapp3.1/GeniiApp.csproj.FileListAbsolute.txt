@@ -574,6 +574,7 @@ C:\Users\ADMIN\Documents\Francis\Job\41\Assessment\GeniiApp\GeniiApp\obj\Debug\n
 C:\Users\ADMIN\Documents\Francis\Job\41\Assessment\GeniiApp\GeniiApp\obj\Debug\netcoreapp3.1\Razor\Views\Products\Details.cshtml.g.cs
 C:\Users\ADMIN\Documents\Francis\Job\41\Assessment\GeniiApp\GeniiApp\obj\Debug\netcoreapp3.1\Razor\Views\Products\Edit.cshtml.g.cs
 C:\Users\ADMIN\Documents\Francis\Job\41\Assessment\GeniiApp\GeniiApp\obj\Debug\netcoreapp3.1\Razor\Views\Products\Index.cshtml.g.cs
+C:\Users\ADMIN\Documents\Francis\Job\41\Assessment\GeniiApp\GeniiApp\obj\Debug\netcoreapp3.1\Razor\Views\Redirect\Index.cshtml.g.cs
 C:\Users\ADMIN\Documents\Francis\Job\41\Assessment\GeniiApp\GeniiApp\obj\Debug\netcoreapp3.1\Razor\Views\Reports\Index.cshtml.g.cs
 C:\Users\ADMIN\Documents\Francis\Job\41\Assessment\GeniiApp\GeniiApp\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
 C:\Users\ADMIN\Documents\Francis\Job\41\Assessment\GeniiApp\GeniiApp\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs

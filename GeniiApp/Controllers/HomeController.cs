@@ -1,5 +1,9 @@
-﻿using GeniiApp.Models;
+﻿using GeniiApp.Areas.Identity.Data;
+using GeniiApp.Areas.Identity.Pages.Account;
+using GeniiApp.Data;
+using GeniiApp.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,15 +18,27 @@ namespace GeniiApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly AuthDbContext _authDbContext;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, RoleManager<IdentityRole> roleManager)
+
+        public HomeController(ILogger<HomeController> logger, RoleManager<IdentityRole> roleManager, AuthDbContext authDbContext, ApplicationDbContext context)
         {
             _logger = logger;
             _roleManager = roleManager;
+            _authDbContext = authDbContext;
+            _context = context;
         }
 
         public IActionResult Index()
         {
+            bool isFresh = FirstTimeUse();
+
+            if (!isFresh)
+            {
+                return RedirectToAction("Index", "Redirect");
+            }
+
             return View();
         }
 
@@ -76,5 +92,11 @@ namespace GeniiApp.Controllers
 
             return result;
         }
+
+        private bool FirstTimeUse()
+        {
+            return _authDbContext.Users.Any();
+        }
+
     }
 }
