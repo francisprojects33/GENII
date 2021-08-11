@@ -30,12 +30,13 @@ namespace GeniiApp.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             bool isFresh = FirstTimeUse();
 
             if (!isFresh)
             {
+                await Create3Roles();
                 return RedirectToAction("Index", "Redirect");
             }
 

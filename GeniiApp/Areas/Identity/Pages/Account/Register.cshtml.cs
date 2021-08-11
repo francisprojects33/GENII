@@ -18,7 +18,7 @@ using GeniiApp.Models;
 
 namespace GeniiApp.Areas.Identity.Pages.Account
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -87,8 +87,6 @@ namespace GeniiApp.Areas.Identity.Pages.Account
             //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ViewData["roles"] = _roleManager.Roles.ToList();
-            //ViewData["roles"] = ;
-            //ReturnUrl = returnUrl;
             return Task.CompletedTask;
         }
 

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GeniiApp.Data;
 using GeniiApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GeniiApp.Controllers
 {
+    [Authorize(Roles = "Manager,User")]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
